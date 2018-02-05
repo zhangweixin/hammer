@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>nathaniel</groupId>
+    <artifactId>app-scaffold</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0</version>
+    <modules>
+        <module>app-spring</module>
+        <module>app-mvc-spring</module>
+        <module>app-datasource-spring</module>
+    </modules>
+
+    <properties>
+        <junit.version>4.12</junit.version>
+        <spring.version>5.0.3.RELEASE</spring.version>
+        <maven.build.source>1.8</maven.build.source>
+        <maven.build.target>1.8</maven.build.target>
+        <project.source.encoding>UTF-8</project.source.encoding>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>default-compile</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <encoding>${project.source.encoding}</encoding>
+                    <source>${maven.build.source}</source>
+                    <target>${maven.build.target}</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

@@ -18,5 +18,11 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>nathaniel</groupId>
+            <artifactId>app-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>

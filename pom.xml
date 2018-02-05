@@ -13,6 +13,7 @@
         <module>app-mvc-spring</module>
         <module>app-datasource-spring</module>
         <module>app-cache</module>
+        <module>app-core</module>
     </modules>
 
     <properties>

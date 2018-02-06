@@ -14,6 +14,7 @@
         <module>app-datasource-spring</module>
         <module>app-cache</module>
         <module>app-core</module>
+        <module>test-spring</module>
     </modules>
 
     <properties>

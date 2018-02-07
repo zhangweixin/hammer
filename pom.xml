@@ -9,17 +9,16 @@
     <packaging>pom</packaging>
     <version>1.0.0</version>
     <modules>
-        <module>app-base-spring</module>
+        <module>app-standard-spring</module>
         <module>app-mvc-spring</module>
         <module>app-datasource-spring</module>
-        <module>app-cache</module>
+        <module>app-cache-spring</module>
         <module>app-core</module>
-        <module>test-spring</module>
+        <module>app-test-spring</module>
     </modules>
 
     <properties>
         <junit.version>4.12</junit.version>
-        <spring.version>5.0.3.RELEASE</spring.version>
         <maven.build.source>1.8</maven.build.source>
         <maven.build.target>1.8</maven.build.target>
         <project.source.encoding>UTF-8</project.source.encoding>
@@ -43,6 +42,35 @@
                     <encoding>${project.source.encoding}</encoding>
                     <source>${maven.build.source}</source>
                     <target>${maven.build.target}</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <!-- 绑定source插件到Maven的生命周期 -->
+                        <phase>package</phase>
+                        <!--在生命周期后执行绑定的source插件的goals -->
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <forkMode>once</forkMode>
+                    <argLine>-Dfile.encoding=${project.source.encoding}</argLine>
+                    <includes>
+                        <include>**/*Test.java</include>
+                    </includes>
+                    <excludes>
+                    </excludes>
                 </configuration>
             </plugin>
         </plugins>

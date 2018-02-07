@@ -10,12 +10,13 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.common.io.CharSource;
 import com.google.common.io.Resources;
+import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ConfigurationLoader {
     private static final Logger logger         = LoggerFactory.getLogger(ConfigurationLoader.class);
-
+    private static final String COMMENT_PREFIX = "#";
     public static Set<Class<?>> loadConfigurationClass(String classPathFile) {
         ClassLoader classLoader = findClassLoader();
         Map<String, Class<?>> clazzMap = Maps.newHashMap();
@@ -24,6 +25,10 @@ public class ConfigurationLoader {
             while (configUrls.hasMoreElements()) {
                 CharSource charSource = Resources.asCharSource(configUrls.nextElement(), Charset.defaultCharset());
                 charSource.forEachLine(line -> {
+                    if (line.startsWith(COMMENT_PREFIX)){
+                        return;
+                    }
+
                     try {
                         Class<?> clazz = Class.forName(line, true, classLoader);
                         clazzMap.put(clazz.getName(), clazz);

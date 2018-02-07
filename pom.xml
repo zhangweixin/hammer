@@ -22,6 +22,7 @@
         <maven.build.source>1.8</maven.build.source>
         <maven.build.target>1.8</maven.build.target>
         <project.source.encoding>UTF-8</project.source.encoding>
+        <spring.version>5.0.3.RELEASE</spring.version>
     </properties>
 
     <build>

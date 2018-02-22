@@ -1,17 +1,20 @@
 package com.nathaniel.app.mvc.servlet;
 
-import com.nathaniel.app.mvc.WebAppContextConfigLoader;
+import java.io.IOException;
+
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServlet;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.ClassUtils;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
-import javax.servlet.*;
-import javax.servlet.http.HttpServlet;
-import java.io.IOException;
-import java.util.Optional;
+import com.nathaniel.app.mvc.WebAppContextConfigLoader;
 
 public class AppServletDispatcher extends HttpServlet implements WebAppContextConfigLoader {
     Logger                    logger = LoggerFactory.getLogger(AppServletDispatcher.class);
@@ -35,20 +38,7 @@ public class AppServletDispatcher extends HttpServlet implements WebAppContextCo
 
     protected WebApplicationContext createDispatchServletContext(ServletConfig config) {
         AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
-        Optional.ofNullable(config.getInitParameter(MAIN_CONFIG_CLASS_PARAM)).ifPresent(mainConfigClassName -> {
-            try {
-                Class<?> mainConfigClass = ClassUtils.forName(mainConfigClassName, AppServletDispatcher.class.getClassLoader());
-                logger.info("注册应用配置类:{}", mainConfigClass.getName());
-                context.register(mainConfigClass);
-            } catch (ClassNotFoundException e) {
-                throw new RuntimeException(e);
-            }
-        });
-
-        Optional.ofNullable(config.getInitParameter(CONFIG_FILE_LOCATION_PARAM)).ifPresent(configFileLocation -> {
-            logger.info("注册配置文件:{}", configFileLocation);
-            context.setConfigLocation(configFileLocation);
-        });
+        registerConfigClass(paramName -> config.getServletContext().getInitParameter(paramName), context);
         return context;
     }
 }

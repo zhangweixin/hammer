@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+         version="3.1">
+
+    <!--部署文件描述名字-->
+    <display-name>xxxx</display-name>
+    <!--欢迎文件配置-->
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
+
+    <!--servlet3.x不需要配置mvc-servlet-->
+
+    <!--下面三个配置方式都可以但是annotation配置类不能重复-->
+
+    <!--    <context-param>
+            <param-name>mainConfigClass</param-name>
+            <param-value>xxxxx</param-value>
+        </context-param>-->
+
+    <!--    <context-param>
+            <param-name>configFileLocation</param-name>
+            <param-value>xxxx</param-value>
+        </context-param>-->
+
+    <!--
+       基于扩展机制的annotation配置加载
+       1.maven项目的resources文件夹下面新建路径META-INF/app
+       2.在META-INF/app下面新建文件app.configuration文件
+       3.在新建文件中把基于annotation的配置类的完全限定名写入文件中即可
+       4.如果有多个配置类也可以都写入到文件中以行分隔
+    -->
+
+</web-app>

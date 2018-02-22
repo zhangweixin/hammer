@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         version="2.5">
+
+    <!--部署文件描述名字-->
+    <display-name>xxxx</display-name>
+    <!--欢迎文件配置-->
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
+
+
+    <!--servlet2.x必须提供基于annotation的配置类或者基于配置文件的配置位置-->
+    <!--    <context-param>
+            <param-name>mainConfigClass</param-name>
+            <param-value>xxxxx</param-value>
+        </context-param>-->
+
+    <!--    <context-param>
+            <param-name>configFileLocation</param-name>
+            <param-value>xxxx</param-value>
+        </context-param>-->
+
+
+    <!--servlet2.x必须配置这个servlet-->
+    <servlet>
+        <servlet-name>spring-mvc-dispatcher</servlet-name>
+        <servlet-class>com.nathaniel.app.mvc.servlet.AppServletDispatcher</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>spring-mvc-dispatcher</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+    <!--filter等其他组件配置-->
+
+</web-app>

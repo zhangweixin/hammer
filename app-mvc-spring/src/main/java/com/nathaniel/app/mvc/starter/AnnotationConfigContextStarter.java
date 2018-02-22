@@ -1,11 +1,19 @@
 package com.nathaniel.app.mvc.starter;
 
-import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
-
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
-public class AnnotationConfigContextStarter extends AbstractAnnotationConfigDispatcherServletInitializer {
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
+import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
+
+import com.nathaniel.app.mvc.WebAppContextConfigLoader;
+import org.springframework.web.servlet.support.AbstractDispatcherServletInitializer;
+
+public class AnnotationConfigContextStarter extends AbstractAnnotationConfigDispatcherServletInitializer implements WebAppContextConfigLoader {
+
+    private ServletContext servletContext;
+
     @Override
     protected Class<?>[] getRootConfigClasses() {
 
@@ -27,9 +35,28 @@ public class AnnotationConfigContextStarter extends AbstractAnnotationConfigDisp
         return "spring-mvc-dispatcher";
     }
 
+    /**
+     * 重载{@link AbstractDispatcherServletInitializer}的onStartup方法保存servletContext
+     * 
+     * @param servletContext
+     * @throws ServletException
+     */
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
-        servletContext.getInitParameter("");
+        this.servletContext = servletContext;
         super.onStartup(servletContext);
+    }
+
+    /**
+     * 自定义applicationContext配置
+     * 
+     * @return WebApplicationContext {@link AnnotationConfigWebApplicationContext}
+     */
+    @Override
+    protected WebApplicationContext createServletApplicationContext() {
+        AnnotationConfigWebApplicationContext webApplicationContext = new AnnotationConfigWebApplicationContext();
+        registerConfigClass(paramName -> servletContext.getInitParameter(paramName), webApplicationContext);
+        servletContext = null;
+        return webApplicationContext;
     }
 }

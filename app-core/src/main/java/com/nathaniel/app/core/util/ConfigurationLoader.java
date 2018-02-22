@@ -4,8 +4,10 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Enumeration;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.common.io.CharSource;
@@ -13,6 +15,7 @@ import com.google.common.io.Resources;
 import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.ObjectUtils;
 
 public class ConfigurationLoader {
     private static final Logger logger         = LoggerFactory.getLogger(ConfigurationLoader.class);
@@ -29,8 +32,12 @@ public class ConfigurationLoader {
                         return;
                     }
 
+                    if (Strings.isNullOrEmpty(line)) {
+                        return;
+                    }
+
                     try {
-                        Class<?> clazz = Class.forName(line, true, classLoader);
+                        Class<?> clazz = Class.forName(line.trim(), true, classLoader);
                         clazzMap.put(clazz.getName(), clazz);
                     } catch (ClassNotFoundException e) {
                         throw new RuntimeException(e);

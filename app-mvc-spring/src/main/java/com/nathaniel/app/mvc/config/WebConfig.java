@@ -11,19 +11,23 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
- * springmvc配置
+ * springmvc配置类
+ * 
+ * @author nathaniel 2018-01-08
  */
 @Configuration
 @EnableWebMvc
 public class WebConfig implements WebMvcConfigurer {
+
+    /**
+     * 自定义spring-mvc httpconveter
+     * 
+     * @param converters
+     */
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         Jackson2ObjectMapperBuilder mapperBuilder = new Jackson2ObjectMapperBuilder();
-        mapperBuilder.timeZone(TimeZone.getDefault())
-                     .indentOutput(true)
-                     .simpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        mapperBuilder.timeZone(TimeZone.getDefault()).indentOutput(true).simpleDateFormat("yyyy-MM-dd HH:mm:ss");
         converters.add(new MappingJackson2HttpMessageConverter(mapperBuilder.build()));
     }
-
-
 }

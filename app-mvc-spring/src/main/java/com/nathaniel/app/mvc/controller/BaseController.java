@@ -3,7 +3,6 @@ package com.nathaniel.app.mvc.controller;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -28,9 +27,9 @@ import com.nathaniel.app.mvc.model.AppResponse;
 import com.nathaniel.app.mvc.util.AppResponseBuilder;
 
 public abstract class BaseController implements EnvironmentAware {
-    private static Logger       logger          = LoggerFactory.getLogger(BaseController.class);
-    private static ObjectMapper objectMapper    = new ObjectMapper();
-    private static String       INNER_CODE_PAGE = "inner.code.page";
+    private static Logger       logger           = LoggerFactory.getLogger(BaseController.class);
+    private static ObjectMapper objectMapper     = new ObjectMapper();
+    private static String       INNER_ERROR_PAGE = "inner.error.page";
     private Environment         environment;
 
     /**
@@ -87,7 +86,7 @@ public abstract class BaseController implements EnvironmentAware {
 
     protected void processHtmlRequestException(HttpServletRequest request, HttpServletResponse response, Exception e) {
         try {
-            request.getRequestDispatcher(environment.getProperty(INNER_CODE_PAGE)).forward(request, response);
+            request.getRequestDispatcher(environment.getProperty(INNER_ERROR_PAGE)).forward(request, response);
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }

@@ -10,11 +10,12 @@
     <version>1.0.0</version>
     <modules>
         <module>app-standard-spring</module>
-        <module>app-mvc-spring</module>
-        <module>app-datasource-spring</module>
-        <module>app-cache-spring</module>
+        <module>app-mvc</module>
+        <module>app-datasource</module>
+        <module>app-cache</module>
         <module>app-core</module>
         <module>app-test-spring</module>
+        <module>app-redis</module>
     </modules>
 
     <properties>

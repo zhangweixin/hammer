@@ -50,7 +50,7 @@ public abstract class BaseController implements EnvironmentAware {
                 processOtherMedisTypeRequestException(request, response, e);
             }
         } catch (Exception ex) {
-            logger.error("处理controller异常失败:", e);
+            logger.error("处理controller异常失败:", ex);
             response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
         }
     }

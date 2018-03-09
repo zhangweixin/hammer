@@ -2,8 +2,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <name>app-cache-spring</name>
-    <artifactId>app-cache-spring</artifactId>
+    <name>app-cache</name>
+    <artifactId>app-cache</artifactId>
     <packaging>jar</packaging>
 
     <parent>
@@ -13,7 +13,8 @@
     </parent>
 
     <properties>
-        <redisson.version>3.6.0</redisson.version>
+        <redisson.version>3.6.2</redisson.version>
+        <caffeine.version>2.6.2</caffeine.version>
     </properties>
 
     <dependencies>
@@ -35,6 +36,13 @@
             <artifactId>redisson</artifactId>
             <version>${redisson.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+            <version>${caffeine.version}</version>
+        </dependency>
+
 
     </dependencies>
 </project>

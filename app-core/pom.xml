@@ -18,6 +18,7 @@
         <log4j.version>2.10.0</log4j.version>
         <okhhtp.version>3.9.0</okhhtp.version>
         <jackson.version>2.9.3</jackson.version>
+        <retry.version>1.2.2.RELEASE</retry.version>
 
     </properties>
 
@@ -88,5 +89,12 @@
             <artifactId>spring-context</artifactId>
             <version>${spring.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.retry</groupId>
+            <artifactId>spring-retry</artifactId>
+            <version>${retry.version}</version>
+        </dependency>
+
     </dependencies>
 </project>

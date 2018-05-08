@@ -15,7 +15,7 @@
         <module>app-cache</module>
         <module>app-core</module>
         <module>app-test-spring</module>
-        <module>app-redis</module>
+        <module>app-servlet-support</module>
     </modules>
 
     <properties>
@@ -24,6 +24,7 @@
         <maven.build.target>1.8</maven.build.target>
         <project.source.encoding>UTF-8</project.source.encoding>
         <spring.version>5.0.3.RELEASE</spring.version>
+        <servlet.version>3.1.0</servlet.version>
     </properties>
 
     <build>

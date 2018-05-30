@@ -10,8 +10,8 @@ import org.springframework.util.ObjectUtils;
 
 import com.nathaniel.app.core.util.ConfigurationLoader;
 
-public class ContextStater {
-    private static Logger       logger         = LoggerFactory.getLogger(ContextStater.class);
+public class AnnotationConfigContextStater {
+    private static Logger       logger         = LoggerFactory.getLogger(AnnotationConfigContextStater.class);
     private static final String EXT_CONFIG_DIR = "META-INF/app/app.configuration";
 
     public static void startContext(Class<?>... customizedConfigClazz) {

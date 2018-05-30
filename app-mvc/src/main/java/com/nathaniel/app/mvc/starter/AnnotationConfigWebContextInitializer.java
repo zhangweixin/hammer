@@ -30,9 +30,9 @@ import javax.servlet.annotation.WebListener;
 import java.util.List;
 
 @Component
-public class AnnotationConfigWebContextStarter extends AbstractAnnotationConfigDispatcherServletInitializer implements WebAppContextConfigLoader, ApplicationContextAware, ApplicationListener<ContextRefreshedEvent> {
+public class AnnotationConfigWebContextInitializer extends AbstractAnnotationConfigDispatcherServletInitializer implements WebAppContextConfigLoader, ApplicationContextAware, ApplicationListener<ContextRefreshedEvent> {
 
-    private static Logger logger = LoggerFactory.getLogger(AnnotationConfigWebContextStarter.class);
+    private static Logger logger = LoggerFactory.getLogger(AnnotationConfigWebContextInitializer.class);
 
     private ServletContext servletContext;
 

@@ -24,7 +24,6 @@ public interface WebAppContextConfigLoader {
     Logger logger                     = LoggerFactory.getLogger(WebApplicationContext.class);
     String CONFIG_CLASS_FILE_DIR      = "META-INF/app/app.configuration";
     String MAIN_CONFIG_CLASS_PARAM    = "mainConfigClass";
-    String CONFIG_FILE_LOCATION_PARAM = "configFileLocation";
 
     /**
      * 加载spring扩展配置组件
@@ -64,9 +63,5 @@ public interface WebAppContextConfigLoader {
             context.register(configClass);
         });
 
-        Optional.ofNullable(paramsWrapper.getConfigParam(CONFIG_FILE_LOCATION_PARAM)).ifPresent(configFileLocation -> {
-            logger.info("注册配置文件:{}", configFileLocation);
-            context.setConfigLocation(configFileLocation);
-        });
     }
 }

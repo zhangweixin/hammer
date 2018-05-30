@@ -4,6 +4,8 @@ import com.google.common.collect.Lists;
 import com.nathaniel.app.mvc.WebAppContextConfigLoader;
 import com.nathaniel.app.mvc.util.FilterWrapper;
 import com.nathaniel.app.mvc.util.ListenerWrapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -28,7 +30,9 @@ import javax.servlet.annotation.WebListener;
 import java.util.List;
 
 @Component
-public class AnnotationConfigContextStarter extends AbstractAnnotationConfigDispatcherServletInitializer implements WebAppContextConfigLoader, ApplicationContextAware, ApplicationListener<ContextRefreshedEvent> {
+public class AnnotationConfigWebContextStarter extends AbstractAnnotationConfigDispatcherServletInitializer implements WebAppContextConfigLoader, ApplicationContextAware, ApplicationListener<ContextRefreshedEvent> {
+
+    private static Logger logger = LoggerFactory.getLogger(AnnotationConfigWebContextStarter.class);
 
     private ServletContext servletContext;
 
@@ -100,10 +104,12 @@ public class AnnotationConfigContextStarter extends AbstractAnnotationConfigDisp
 
 
     private void registerFilter() {
+        logger.info("begin regist servlet filter...");
         filterWrappers.forEach(filterWrapper -> filterWrapper.registerFilter(servletContext));
     }
 
     private void registerListener() {
+        logger.info("begin regist servlet listener...");
         listenerWrappers.forEach(listenerWrapper -> listenerWrapper.registerListener(servletContext));
     }
 
@@ -120,7 +126,7 @@ public class AnnotationConfigContextStarter extends AbstractAnnotationConfigDisp
 
         if (!ObjectUtils.isEmpty(beanNamesForWebListener)) {
             List<String> listenerNames = Lists.newArrayList(beanNamesForWebListener);
-            listenerNames.forEach(listenerName -> listenerWrappers.add(parseListenerInfo(webApplicationContext.getBean(listenerName))));
+            listenerNames.forEach(listenerName -> listenerWrappers.add(parseServletContextListenerInfo(webApplicationContext.getBean(listenerName))));
         }
 
     }
@@ -138,19 +144,21 @@ public class AnnotationConfigContextStarter extends AbstractAnnotationConfigDisp
             }
             return new FilterWrapper(filter, attributes);
         } else {
-            throw new RuntimeException("");
+            logger.warn("{} not implement interface:{}", o.getClass().getName(), Filter.class.getName());
+            throw new RuntimeException(o.getClass().getName() + "can not cast to" + Filter.class.getName());
         }
     }
 
-    private ListenerWrapper parseListenerInfo(Object o) {
+    private ListenerWrapper parseServletContextListenerInfo(Object o) {
         if (o instanceof ServletContextListener) {
             ServletContextListener listener = (ServletContextListener) o;
             WebListener annotation = AnnotationUtils.findAnnotation(listener.getClass(), WebListener.class);
             AnnotationAttributes attributes = AnnotationUtils.getAnnotationAttributes(annotation, true, true);
             return new ListenerWrapper(listener, attributes);
         } else {
-            throw new RuntimeException("");
+            logger.warn("{} not implement interface:{}", o.getClass().getName(), ServletContextListener.class.getName());
+            throw new RuntimeException(o.getClass().getName() + "can not cast to" + ServletContextListener.class.getName());
         }
     }
-    
+
 }

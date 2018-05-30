@@ -85,7 +85,6 @@ public class AnnotationConfigWebContextStarter extends AbstractAnnotationConfigD
     protected WebApplicationContext createServletApplicationContext() {
         AnnotationConfigWebApplicationContext webApplicationContext = new AnnotationConfigWebApplicationContext();
         registerConfigClass(paramName -> servletContext.getInitParameter(paramName), webApplicationContext);
-        servletContext = null;
         return webApplicationContext;
     }
 

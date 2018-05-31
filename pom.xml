@@ -16,6 +16,9 @@
         <module>core</module>
         <module>app-test-spring</module>
         <module>http-server</module>
+        <module>distributed-lock</module>
+        <module>distributed-id</module>
+        <module>rpc</module>
     </modules>
 
     <properties>

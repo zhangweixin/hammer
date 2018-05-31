@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>app-servlet-support</artifactId>
+    <version>${parent.version}</version>
 
     <properties>
         <undertow.version>2.0.6.Final</undertow.version>

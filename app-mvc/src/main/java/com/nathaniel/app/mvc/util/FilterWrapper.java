@@ -1,3 +1,20 @@
+/**
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.nathaniel.app.mvc.util;
 
 import com.google.common.collect.Sets;
@@ -15,18 +32,18 @@ import java.util.EnumSet;
 import java.util.Set;
 
 public class FilterWrapper {
-    private static Logger logger = LoggerFactory.getLogger(FilterWrapper.class);
-    private static String INIT_PARAMS_ATTR = "initParams";
-    private static String DISPATCHER_TYPES_ATTR = "dispatcherTypes";
-    private static String VALUE_ATTR = "value";
-    private static String URL_PATTERNS_ATTR = "urlPatterns";
-    private static String ASYNC_SUPPORTED_ATTR = "asyncSupported";
-    private static String SERVLET_NAMES_ATTR = "servletNames";
-    private static String FILTER_NAME_ATTR = "filterName";
+    private static Logger        logger                = LoggerFactory.getLogger(FilterWrapper.class);
+    private static String        INIT_PARAMS_ATTR      = "initParams";
+    private static String        DISPATCHER_TYPES_ATTR = "dispatcherTypes";
+    private static String        VALUE_ATTR            = "value";
+    private static String        URL_PATTERNS_ATTR     = "urlPatterns";
+    private static String        ASYNC_SUPPORTED_ATTR  = "asyncSupported";
+    private static String        SERVLET_NAMES_ATTR    = "servletNames";
+    private static String        FILTER_NAME_ATTR      = "filterName";
 
     private AnnotationAttributes filterAttributes;
 
-    private Filter filter;
+    private Filter               filter;
 
     public FilterWrapper(Filter filter, AnnotationAttributes filterAttributes) {
         this.filterAttributes = filterAttributes;

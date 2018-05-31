@@ -1,3 +1,20 @@
+/**
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.nathaniel.app.mvc.starter;
 
 import com.google.common.collect.Lists;
@@ -29,16 +46,20 @@ import javax.servlet.annotation.WebListener;
 import java.util.List;
 
 @Component
-public class AnnotationConfigWebContextInitializer extends AbstractAnnotationConfigDispatcherServletInitializer implements ApplicationContextAware, ApplicationListener<ContextRefreshedEvent> {
+public class AnnotationConfigWebContextInitializer extends AbstractAnnotationConfigDispatcherServletInitializer
+                                                                                                               implements
+                                                                                                               ApplicationContextAware,
+                                                                                                               ApplicationListener<ContextRefreshedEvent> {
 
-    private static Logger logger = LoggerFactory.getLogger(AnnotationConfigWebContextInitializer.class);
+    private static Logger                         logger           = LoggerFactory
+                                                                       .getLogger(AnnotationConfigWebContextInitializer.class);
 
-    private ServletContext servletContext;
+    private ServletContext                        servletContext;
 
     private AnnotationConfigWebApplicationContext webApplicationContext;
 
-    private List<FilterWrapper> filterWrappers = Lists.newArrayList();
-    private List<ListenerWrapper> listenerWrappers = Lists.newArrayList();
+    private List<FilterWrapper>                   filterWrappers   = Lists.newArrayList();
+    private List<ListenerWrapper>                 listenerWrappers = Lists.newArrayList();
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
@@ -53,7 +74,7 @@ public class AnnotationConfigWebContextInitializer extends AbstractAnnotationCon
 
     @Override
     protected String[] getServletMappings() {
-        return new String[]{"/"};
+        return new String[] { "/" };
     }
 
     @Override
@@ -85,7 +106,6 @@ public class AnnotationConfigWebContextInitializer extends AbstractAnnotationCon
         return new AnnotationConfigWebApplicationContext();
     }
 
-
     @Override
     protected WebApplicationContext createRootApplicationContext() {
         return webApplicationContext;
@@ -97,7 +117,6 @@ public class AnnotationConfigWebContextInitializer extends AbstractAnnotationCon
             webApplicationContext = (AnnotationConfigWebApplicationContext) applicationContext;
         }
     }
-
 
     private void registerFilter() {
         logger.info("begin regist servlet filter...");
@@ -127,7 +146,6 @@ public class AnnotationConfigWebContextInitializer extends AbstractAnnotationCon
 
     }
 
-
     private FilterWrapper parseFilterInfo(Object o) {
         if (o instanceof Filter) {
             Filter filter = (Filter) o;
@@ -152,8 +170,10 @@ public class AnnotationConfigWebContextInitializer extends AbstractAnnotationCon
             AnnotationAttributes attributes = AnnotationUtils.getAnnotationAttributes(annotation, true, true);
             return new ListenerWrapper(listener, attributes);
         } else {
-            logger.warn("{} not implement interface:{}", o.getClass().getName(), ServletContextListener.class.getName());
-            throw new RuntimeException(o.getClass().getName() + "can not cast to" + ServletContextListener.class.getName());
+            logger
+                .warn("{} not implement interface:{}", o.getClass().getName(), ServletContextListener.class.getName());
+            throw new RuntimeException(o.getClass().getName() + "can not cast to" +
+                ServletContextListener.class.getName());
         }
     }
 

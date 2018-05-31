@@ -9,13 +9,13 @@
     <packaging>pom</packaging>
     <version>1.0.0</version>
     <modules>
-        <module>app-standard-spring</module>
-        <module>app-mvc</module>
-        <module>app-datasource</module>
-        <module>app-cache</module>
-        <module>app-core</module>
+        <module>standard</module>
+        <module>mvc</module>
+        <module>datasource</module>
+        <module>cache</module>
+        <module>core</module>
         <module>app-test-spring</module>
-        <module>app-servlet-support</module>
+        <module>http-server</module>
     </modules>
 
     <properties>

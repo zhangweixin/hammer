@@ -49,6 +49,7 @@ public class AppLauncher {
             try {
                 clazz = Class.forName(contextLauncherClassName, true, AppLauncher.class.getClassLoader());
                 logger.info("loaded context launcher:{}", contextLauncherClassName);
+                break;
             } catch (Exception e) {
             }
         }

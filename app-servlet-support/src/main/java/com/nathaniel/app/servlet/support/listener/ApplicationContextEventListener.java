@@ -22,7 +22,7 @@ public class ApplicationContextEventListener implements SmartApplicationListener
 
     @Override
     public boolean supportsEventType(Class<? extends ApplicationEvent> eventType) {
-        if (ContextRefreshedEvent.class.isAssignableFrom(eventType) || ContextClosedEvent.class.isAssignableFrom(eventType)) {
+        if (ContextRefreshedEvent.class.isAssignableFrom(eventType)) {
             return true;
         }
         return false;
@@ -38,14 +38,17 @@ public class ApplicationContextEventListener implements SmartApplicationListener
         if (event instanceof ContextRefreshedEvent) {
             logger.info("startup undertow http server...");
             undertow.startup();
-        } else if (event instanceof ContextClosedEvent) {
-            logger.info("shutdown undertow http server...");
-            undertow.shutdown();
+            registerShutdownHook();
         }
     }
 
     @Override
     public int getOrder() {
         return LOWEST_PRECEDENCE;
+    }
+
+
+    private void registerShutdownHook() {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> undertow.shutdownGracefully()));
     }
 }

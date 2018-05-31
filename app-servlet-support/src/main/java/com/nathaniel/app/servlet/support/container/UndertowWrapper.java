@@ -1,7 +1,7 @@
 package com.nathaniel.app.servlet.support.container;
 
 import com.google.common.collect.Sets;
-import com.nathaniel.app.servlet.support.listener.UndertowShutdownListener;
+import com.nathaniel.app.servlet.support.listener.InnerShutdownCompleteListener;
 import com.nathaniel.app.servlet.support.model.UndertowConfig;
 import io.undertow.Undertow;
 import io.undertow.server.DefaultByteBufferPool;
@@ -16,7 +16,6 @@ import io.undertow.servlet.util.ImmediateInstanceFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.context.ApplicationContext;
@@ -28,8 +27,7 @@ import org.springframework.web.WebApplicationInitializer;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
-import java.awt.*;
-import java.util.Arrays;
+import java.nio.charset.Charset;
 import java.util.Set;
 
 @Component
@@ -39,7 +37,7 @@ public class UndertowWrapper implements ApplicationContextAware {
     @Resource
     private UndertowConfig config;
     @Resource
-    private UndertowShutdownListener shutdownListener;
+    private InnerShutdownCompleteListener shutdownListener;
     private ConfigurableApplicationContext cac;
 
     private Undertow undertow;
@@ -51,7 +49,8 @@ public class UndertowWrapper implements ApplicationContextAware {
     public void startup() {
         initDeploymentManager();
         initHttpServer();
-        startContainer();
+        startHttpserver();
+        registerShutdownListener();
     }
 
     private void initHttpServer() {
@@ -64,7 +63,6 @@ public class UndertowWrapper implements ApplicationContextAware {
         try {
             HttpHandler httpHandler = deploymentManager.start();
             gracefulShutdownHandler = new GracefulShutdownHandler(httpHandler);
-            gracefulShutdownHandler.addShutdownListener(shutdownListener);
             builder.setHandler(gracefulShutdownHandler);
             undertow = builder.build();
         } catch (ServletException e) {
@@ -78,10 +76,12 @@ public class UndertowWrapper implements ApplicationContextAware {
         ServletContainerInitializerInfo containerInitializerInfo = new ServletContainerInitializerInfo(SpringServletContainerInitializer.class, instanceFactory, retrieveInitializer());
         deployment.addServletContainerInitalizer(containerInitializerInfo);
         deployment.setContextPath(config.getContextPath());
-        deployment.setDeploymentName("");
-        deployment.setDisplayName("");
+        deployment.setDeploymentName(config.getDeploymentName());
+        deployment.setDisplayName(config.getDisplayName());
         deployment.setServerName(config.getServerName());
         deployment.setClassLoader(Thread.currentThread().getContextClassLoader());
+        deployment.setDefaultRequestEncoding(Charset.defaultCharset().displayName());
+        deployment.setDefaultResponseEncoding(Charset.defaultCharset().displayName());
 
         deploymentManager = Servlets.newContainer().addDeployment(deployment);
         deploymentManager.deploy();
@@ -91,12 +91,17 @@ public class UndertowWrapper implements ApplicationContextAware {
     }
 
 
-    private void startContainer() {
+    private void startHttpserver() {
         undertow.start();
     }
 
     public void shutdown() {
-        undertow.stop();
+        try {
+            deploymentManager.stop();
+            undertow.stop();
+        } catch (ServletException e) {
+            throw new RuntimeException("unable to stop undertow", e);
+        }
     }
 
     @Override
@@ -129,6 +134,12 @@ public class UndertowWrapper implements ApplicationContextAware {
         return Sets.newHashSet();
     }
 
+    public void shutdownGracefully() {
+        gracefulShutdownHandler.shutdown();
+    }
 
-
+    private void registerShutdownListener() {
+        shutdownListener.setUndertowWrapper(this);
+        gracefulShutdownHandler.addShutdownListener(shutdownListener);
+    }
 }

@@ -21,6 +21,7 @@
         <module>rpc</module>
         <module>db-middleware</module>
         <module>mq-middleware</module>
+        <module>register-center</module>
     </modules>
 
     <properties>

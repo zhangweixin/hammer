@@ -19,6 +19,8 @@
         <module>distributed-lock</module>
         <module>distributed-id</module>
         <module>rpc</module>
+        <module>db-middleware</module>
+        <module>mq-middleware</module>
     </modules>
 
     <properties>

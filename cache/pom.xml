@@ -2,8 +2,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <name>app-cache</name>
-    <artifactId>app-cache</artifactId>
+    <name>cache</name>
+    <artifactId>cache</artifactId>
     <packaging>jar</packaging>
 
     <parent>
@@ -27,7 +27,7 @@
 
         <dependency>
             <groupId>nathaniel</groupId>
-            <artifactId>app-core</artifactId>
+            <artifactId>core</artifactId>
             <version>${project.version}</version>
         </dependency>
 

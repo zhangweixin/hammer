@@ -1,9 +1,6 @@
-package com.nathaniel.app.mvc;
+package com.nathaniel.app.servlet.support.config;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
+import com.nathaniel.app.core.util.ConfigurationLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
@@ -11,23 +8,23 @@ import org.springframework.util.ClassUtils;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 
-import com.nathaniel.app.core.util.ConfigurationLoader;
-import com.nathaniel.app.mvc.servlet.AppServletDispatcher;
-import com.nathaniel.app.mvc.util.WebConfigParamsWrapper;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * spring-context配置类/配置文件加载工具
- * 
+ *
  * @author nathaniel 2018-02-22
  */
 public interface WebAppContextConfigLoader {
-    Logger logger                     = LoggerFactory.getLogger(WebApplicationContext.class);
-    String CONFIG_CLASS_FILE_DIR      = "META-INF/app/app.configuration";
-    String MAIN_CONFIG_CLASS_PARAM    = "mainConfigClass";
+    Logger logger = LoggerFactory.getLogger(WebApplicationContext.class);
+    String CONFIG_CLASS_FILE_DIR = "META-INF/app/app.configuration";
+    String MAIN_CONFIG_CLASS_PARAM = "mainConfigClass";
 
     /**
      * 加载spring扩展配置组件
-     * 
+     *
      * @return
      */
     default List<Class<?>> loadConfigClass() {
@@ -43,14 +40,14 @@ public interface WebAppContextConfigLoader {
 
     /**
      * 注册配置组件类/设置配置文件到给定的annotationApplicationContext
-     * 
+     *
      * @param paramsWrapper
      * @param context
      */
     default void registerConfigClass(WebConfigParamsWrapper paramsWrapper, AnnotationConfigWebApplicationContext context) {
         Optional.ofNullable(paramsWrapper.getConfigParam(MAIN_CONFIG_CLASS_PARAM)).ifPresent(mainConfigClassName -> {
             try {
-                Class<?> mainConfigClass = ClassUtils.forName(mainConfigClassName, AppServletDispatcher.class.getClassLoader());
+                Class<?> mainConfigClass = ClassUtils.forName(mainConfigClassName, WebAppContextConfigLoader.class.getClassLoader());
                 logger.info("注册app自定义配置类:{}", mainConfigClass.getName());
                 context.register(mainConfigClass);
             } catch (ClassNotFoundException e) {

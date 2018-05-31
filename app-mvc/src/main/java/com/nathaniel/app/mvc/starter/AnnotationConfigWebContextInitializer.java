@@ -1,7 +1,6 @@
 package com.nathaniel.app.mvc.starter;
 
 import com.google.common.collect.Lists;
-import com.nathaniel.app.mvc.WebAppContextConfigLoader;
 import com.nathaniel.app.mvc.util.FilterWrapper;
 import com.nathaniel.app.mvc.util.ListenerWrapper;
 import org.slf4j.Logger;
@@ -30,7 +29,7 @@ import javax.servlet.annotation.WebListener;
 import java.util.List;
 
 @Component
-public class AnnotationConfigWebContextInitializer extends AbstractAnnotationConfigDispatcherServletInitializer implements WebAppContextConfigLoader, ApplicationContextAware, ApplicationListener<ContextRefreshedEvent> {
+public class AnnotationConfigWebContextInitializer extends AbstractAnnotationConfigDispatcherServletInitializer implements ApplicationContextAware, ApplicationListener<ContextRefreshedEvent> {
 
     private static Logger logger = LoggerFactory.getLogger(AnnotationConfigWebContextInitializer.class);
 
@@ -83,9 +82,7 @@ public class AnnotationConfigWebContextInitializer extends AbstractAnnotationCon
      */
     @Override
     protected WebApplicationContext createServletApplicationContext() {
-        AnnotationConfigWebApplicationContext webApplicationContext = new AnnotationConfigWebApplicationContext();
-        registerConfigClass(paramName -> servletContext.getInitParameter(paramName), webApplicationContext);
-        return webApplicationContext;
+        return new AnnotationConfigWebApplicationContext();
     }
 
 

@@ -14,8 +14,6 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
-import com.nathaniel.app.mvc.WebAppContextConfigLoader;
-
 public class AppServletDispatcher extends HttpServlet implements WebAppContextConfigLoader {
     Logger                    logger = LoggerFactory.getLogger(AppServletDispatcher.class);
     private DispatcherServlet dispatcherServlet;

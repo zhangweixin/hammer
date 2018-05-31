@@ -1,43 +1,65 @@
 package com.nathaniel.app.core.start;
 
-import com.nathaniel.app.core.constant.CoreContant;
-import com.nathaniel.app.core.util.ExecuteEnvironment;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.support.PropertiesLoaderUtils;
+
+import java.io.IOException;
+import java.lang.management.ManagementFactory;
+import java.lang.management.RuntimeMXBean;
+import java.util.Properties;
 
 public class AppLauncher {
+    private static Logger logger = LoggerFactory.getLogger(AppLauncher.class);
+    private static Properties contextLauncherProperties;
+    private static final String LAUNCHER_CONFIG_FILE = "contextLauncher.properties";
 
     public static void main(String[] args) {
-        detectEnvironment();
-        launch();
+        prepareLaunch();
+        launch(loadContextLauncherClass());
     }
 
 
-    private static void detectEnvironment() {
+    public static void launch(Class<?> contextLauncherClass) {
+        ContextLauncher launcher;
         try {
-            Class.forName("com.nathaniel.app.base.context.AnnotationConfigContextStater", false, AppLauncher.class.getClassLoader());
-            System.getenv().put(CoreContant.EXE_ENV, ExecuteEnvironment.STANDARD.getKey());
-            return;
+            launcher = (ContextLauncher) contextLauncherClass.newInstance();
         } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-
-        try {
-            Class.forName("com.nathaniel.app.servlet.support.container.UndertowWrapper", false, AppLauncher.class.getClassLoader());
-            System.getenv().put(CoreContant.EXE_ENV, ExecuteEnvironment.WEN_EMBED.getKey());
-            return;
-        } catch (Exception e) {
-        }
-
+        launcher.launchContext();
     }
 
-    private static void launch() {
-        String env = System.getenv().get(CoreContant.EXE_ENV);
-        if (ExecuteEnvironment.STANDARD.equals(ExecuteEnvironment.getInstance(env))) {
+    private static void prepareLaunch() {
+        logger.info("begining launch app,pid:" + getProcessId());
+    }
 
-        }else {
+    private static Class<?> loadContextLauncherClass() {
+        ClassPathResource resource = new ClassPathResource(LAUNCHER_CONFIG_FILE, AppLauncher.class);
+        try {
+            contextLauncherProperties = PropertiesLoaderUtils.loadProperties(resource);
+        } catch (IOException e) {
+            throw new RuntimeException("load config file: " + LAUNCHER_CONFIG_FILE + " fail!", e);
+        }
+
+        Class<?> clazz = null;
+        for (String propertyName : contextLauncherProperties.stringPropertyNames()) {
+            String contextLauncherClassName = contextLauncherProperties.getProperty(propertyName);
             try {
-                Class.forName("com.nathaniel.app.mvc.starter.AnnotationConfigWebContextStarter");
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+                clazz = Class.forName(contextLauncherClassName, true, AppLauncher.class.getClassLoader());
+                logger.info("loaded context launcher:{}", contextLauncherClassName);
+            } catch (Exception e) {
             }
         }
+        return clazz;
     }
+
+    private static String getProcessId() {
+        RuntimeMXBean runtimeMXBean = ManagementFactory.getRuntimeMXBean();
+        String pid = runtimeMXBean.getName().split("@")[0];
+        return pid;
+    }
+
+
 }

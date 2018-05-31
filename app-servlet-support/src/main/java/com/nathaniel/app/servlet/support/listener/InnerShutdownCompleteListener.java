@@ -4,9 +4,7 @@ import com.nathaniel.app.servlet.support.container.UndertowWrapper;
 import io.undertow.server.handlers.GracefulShutdownHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
-@Component
 public class InnerShutdownCompleteListener implements GracefulShutdownHandler.ShutdownListener {
     private static Logger logger = LoggerFactory.getLogger(InnerShutdownCompleteListener.class);
     private UndertowWrapper undertow;

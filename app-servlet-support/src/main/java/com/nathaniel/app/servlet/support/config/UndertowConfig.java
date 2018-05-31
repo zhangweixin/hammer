@@ -1,4 +1,4 @@
-package com.nathaniel.app.servlet.support.model;
+package com.nathaniel.app.servlet.support.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

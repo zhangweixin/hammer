@@ -1,4 +1,4 @@
-package com.nathaniel.app.servlet.support.config;
+package com.nathaniel.app.servlet.support.util;
 
 import com.nathaniel.app.core.util.ConfigurationLoader;
 import org.slf4j.Logger;

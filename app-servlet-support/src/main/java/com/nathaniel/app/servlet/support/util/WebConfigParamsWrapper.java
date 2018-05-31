@@ -1,4 +1,4 @@
-package com.nathaniel.app.servlet.support.config;
+package com.nathaniel.app.servlet.support.util;
 
 /**
  * {@link javax.servlet.ServletContext} or {@link javax.servlet.ServletConfig}

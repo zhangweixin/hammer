@@ -2,7 +2,7 @@ package com.nathaniel.app.servlet.support.container;
 
 import com.google.common.collect.Sets;
 import com.nathaniel.app.servlet.support.listener.InnerShutdownCompleteListener;
-import com.nathaniel.app.servlet.support.model.UndertowConfig;
+import com.nathaniel.app.servlet.support.config.UndertowConfig;
 import io.undertow.Undertow;
 import io.undertow.server.DefaultByteBufferPool;
 import io.undertow.server.HttpHandler;
@@ -36,9 +36,10 @@ public class UndertowWrapper implements ApplicationContextAware {
 
     @Resource
     private UndertowConfig config;
-    @Resource
-    private InnerShutdownCompleteListener shutdownListener;
-    private ConfigurableApplicationContext cac;
+
+    private InnerShutdownCompleteListener shutdownListener = new InnerShutdownCompleteListener();
+
+    private ConfigurableApplicationContext rootCac;
 
     private Undertow undertow;
 
@@ -47,10 +48,9 @@ public class UndertowWrapper implements ApplicationContextAware {
     private GracefulShutdownHandler gracefulShutdownHandler;
 
     public void startup() {
-        initDeploymentManager();
+        deployApp();
         initHttpServer();
         startHttpserver();
-        registerShutdownListener();
     }
 
     private void initHttpServer() {
@@ -60,6 +60,7 @@ public class UndertowWrapper implements ApplicationContextAware {
         builder.setByteBufferPool(new DefaultByteBufferPool(config.getUseDirectBuffers(), config.getBufferSize(), config.getBufferPoolSize(), 12));
         builder.addHttpListener(config.getPort(), config.getListenAddress());
 
+        registerShutdownListener();
         try {
             HttpHandler httpHandler = deploymentManager.start();
             gracefulShutdownHandler = new GracefulShutdownHandler(httpHandler);
@@ -70,10 +71,11 @@ public class UndertowWrapper implements ApplicationContextAware {
         }
     }
 
-    private void initDeploymentManager() {
+    private void deployApp() {
         DeploymentInfo deployment = Servlets.deployment();
         ImmediateInstanceFactory<SpringServletContainerInitializer> instanceFactory = new ImmediateInstanceFactory<>(new SpringServletContainerInitializer());
-        ServletContainerInitializerInfo containerInitializerInfo = new ServletContainerInitializerInfo(SpringServletContainerInitializer.class, instanceFactory, retrieveInitializer());
+        ServletContainerInitializerInfo containerInitializerInfo = new ServletContainerInitializerInfo(SpringServletContainerInitializer.class, instanceFactory, retrieveWebInitializer());
+
         deployment.addServletContainerInitalizer(containerInitializerInfo);
         deployment.setContextPath(config.getContextPath());
         deployment.setDeploymentName(config.getDeploymentName());
@@ -107,15 +109,15 @@ public class UndertowWrapper implements ApplicationContextAware {
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         if (applicationContext instanceof ConfigurableApplicationContext) {
-            this.cac = (ConfigurableApplicationContext) applicationContext;
+            this.rootCac = (ConfigurableApplicationContext) applicationContext;
         }
     }
 
 
-    private Set<Class<?>> retrieveInitializer() {
-        String[] names = cac.getBeanNamesForType(WebApplicationInitializer.class);
+    private Set<Class<?>> retrieveWebInitializer() {
+        String[] names = rootCac.getBeanNamesForType(WebApplicationInitializer.class);
         if (names != null && names.length != 0) {
-            ConfigurableListableBeanFactory beanFactory = cac.getBeanFactory();
+            ConfigurableListableBeanFactory beanFactory = rootCac.getBeanFactory();
             Set<Class<?>> beanClasses = Sets.newHashSet();
             for (String name : names) {
                 AbstractBeanDefinition beanDefinition = (AbstractBeanDefinition) beanFactory.getBeanDefinition(name);

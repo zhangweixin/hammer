@@ -1,1 +1,1 @@
-com.nathaniel.app.mvc.config.WebConfig
+com.nathaniel.app.servlet.support.config.HttpServerConfig

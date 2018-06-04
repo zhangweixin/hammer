@@ -31,8 +31,8 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
-public class AppServletDispatcher extends HttpServlet  {
-    Logger                    logger = LoggerFactory.getLogger(AppServletDispatcher.class);
+public class AppServletDispatcher extends HttpServlet {
+    private static Logger     logger = LoggerFactory.getLogger(AppServletDispatcher.class);
     private DispatcherServlet dispatcherServlet;
 
     @Override

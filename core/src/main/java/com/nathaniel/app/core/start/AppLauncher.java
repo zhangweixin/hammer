@@ -25,6 +25,7 @@ import org.springframework.core.io.support.PropertiesLoaderUtils;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
+import java.text.MessageFormat;
 import java.util.Properties;
 
 public class AppLauncher {
@@ -48,7 +49,16 @@ public class AppLauncher {
     }
 
     private static void prepareLaunch() {
-        logger.info("begining launch app,pid:" + getProcessId());
+        String version = "*\n" +
+                         "*\n" +
+                         "*******     *** *    * *** ***   * *** ***       ***      *  *\n" +
+                         "*     *    *   **    **   *   *  **   *   *    *     *    * *\n" +
+                         "*     *   *     *    *    *   *  *    *   *   *  * *  *   **\n" +
+                         "*     *    *   **    *    *   *  *    *   *    *          *\n" +
+                         "*     *     *** *    *    *   *  *    *   *      ***      *"+
+                         "                                                         \n"+
+                         "                  version:{0}  processid:{1}              ";
+        logger.info(version,"1.0.0",getProcessId());
     }
 
     private static Class<?> loadContextLauncherClass() {
